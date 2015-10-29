@@ -1,9 +1,6 @@
-_     = require('underscore')
-Twit  = require('twit')
-wfall = require('async-waterfall')
-
+Twit = require('twit')
 # Tracked token
-TRACKED_TOKEN        = process.env.TRACKED_TOKEN or 'féminisme'
+TRACKED_TOKEN = process.env.TRACKED_TOKEN or 'féminisme'
 
 twit = new Twit
     consumer_key:         process.env.TW_CONSUMER_KEY
@@ -12,13 +9,14 @@ twit = new Twit
     access_token_secret:  process.env.TW_ACCESS_TOKEN_SECRET
 
 stream = exports.stream = ->
-    # stream research on public statuses
-    st = twit.stream 'statuses/filter', track: TRACKED_TOKEN
-    st.on "tweet", (tweet) ->
-      # Tweet the new status
-      twit.post 'statuses/update', status: replace(tweet.text), ->
-        # Print out info
-        console.info 'New tweet from https://twitter.com/%s/status/%s', tweet.user.screen_name, tweet.id_str
+  console.log 'Now streaming on [%s]', TRACKED_TOKEN
+  # stream research on public statuses
+  st = twit.stream 'statuses/filter', track: TRACKED_TOKEN
+  st.on "tweet", (tweet) ->
+    # Tweet the new status
+    twit.post 'statuses/update', status: replace(tweet.text), ->
+      # Print out info
+      console.log 'New tweet from https://twitter.com/%s/status/%s', tweet.user.screen_name, tweet.id_str
 
 
 replace = exports.replace = (text)->
