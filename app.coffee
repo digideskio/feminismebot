@@ -33,6 +33,7 @@ replace = exports.replace = (text)->
 # Start monitoring
 do stream
 
+# Minimalistic web-server to keep the service up
 require('http').createServer( (req, res)->
   res.writeHead 200, 'Content-Type': 'text/plain;charset=utf-8'
   res.end GENERAL_OUTPUT
