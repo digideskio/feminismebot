@@ -16,6 +16,9 @@ twit = new Twit
     access_token:         process.env.TW_ACCESS_TOKEN
     access_token_secret:  process.env.TW_ACCESS_TOKEN_SECRET
 
+# Dummy noop fonction
+noop = (->)
+
 stream = exports.stream = ->
   console.log GENERAL_OUTPUT
   # stream research on public statuses
@@ -25,6 +28,8 @@ stream = exports.stream = ->
     twit.post 'statuses/update', status: replace(tweet.text), ->
       # Print out info
       console.log 'New tweet from https://twitter.com/%s/status/%s', tweet.user.screen_name, tweet.id_str
+      # Favorites the original status
+      twit.post 'favorites/create', id: tweet.id_str, noop
 
 replace = exports.replace = (text)->
   text.replace /(#?féminisme)/gi, (match, p1)->
