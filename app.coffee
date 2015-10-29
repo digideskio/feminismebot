@@ -2,9 +2,13 @@
 envfile = __dirname + '/.env'
 require('node-env-file')(envfile) if require('fs').existsSync(envfile)
 
-Twit = require('twit')
 # Tracked token
 TRACKED_TOKEN = process.env.TRACKED_TOKEN or 'féminisme'
+GENERAL_OUTPUT = 'Now streaming on [' + TRACKED_TOKEN + ']'
+# Web server port
+PORT = process.env.PORT or 9000
+
+Twit = require('twit')
 
 twit = new Twit
     consumer_key:         process.env.TW_CONSUMER_KEY
@@ -13,7 +17,7 @@ twit = new Twit
     access_token_secret:  process.env.TW_ACCESS_TOKEN_SECRET
 
 stream = exports.stream = ->
-  console.log 'Now streaming on [%s]', TRACKED_TOKEN
+  console.log GENERAL_OUTPUT
   # stream research on public statuses
   st = twit.stream 'statuses/filter', track: TRACKED_TOKEN
   st.on "tweet", (tweet) ->
@@ -28,3 +32,8 @@ replace = exports.replace = (text)->
 
 # Start monitoring
 do stream
+
+require('http').createServer( (req, res)->
+  res.writeHead 200, 'Content-Type': 'text/plain;charset=utf-8'
+  res.end GENERAL_OUTPUT
+).listen(PORT)
