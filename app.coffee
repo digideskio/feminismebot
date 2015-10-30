@@ -29,7 +29,7 @@ stream = exports.stream = ->
       # Print out info
       console.log 'New tweet from https://twitter.com/%s/status/%s', tweet.user.screen_name, tweet.id_str
       # Favorites the original status
-      twit.post 'favorites/create', id: tweet.id_str, noop
+      # twit.post 'favorites/create', id: tweet.id_str, noop
 
 replace = exports.replace = (text)->
   text.replace /(#?féminisme)/gi, (match, p1)->
